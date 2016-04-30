@@ -1,6 +1,5 @@
 import numpy as np
 from PIL import Image
-from os import walk
 import pandas as pd
 
 
@@ -9,15 +8,15 @@ driver_list = pd.read_csv('/home/smsouthard/Data/train/driver_imgs_list.csv')
 mypath = '/home/smsouthard/Data/train/'
 
 driver_list['path'] = mypath \
-                      + driver_list['classname'] \ 
+                      + driver_list['classname'] \
                       + '/' \
                       + driver_list['img']
 
 
 
+image_list = []
 
-for
+for link in driver_list['path']:
+    image_list.append(np.asarray(Image.open(link).convert('L')).flatten())
 
-numpy.asarray(Image.open('').convert('L'))
-
-
+image_list = np.stack(image_list)
