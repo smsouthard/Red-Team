@@ -1,11 +1,7 @@
 import sys
-import os
-from os import listdir
-from os.path import isfile, join
 import numpy as np
 from scipy import ndimage
 from scipy import misc
-import matplotlib.pyplot as plt
 import pandas as pd
 
 class ImageManipulator(object):
@@ -25,6 +21,7 @@ class ImageManipulator(object):
             classname = driver[1]
             image_name = driver[2]
             src_dir = classname
+            print("Processing picture" + image_name)
             image = misc.imread(src_dir + "/" + image_name)
             self.rotate(image, image_name, src_dir, subject)
             self.blur(image, image_name, src_dir, subject)
@@ -35,6 +32,7 @@ class ImageManipulator(object):
         new_image_name = action + "_" + image_name
         self.write_row(subject, src_dir, new_image_name, action)
         misc.imsave(src_dir + "/" + new_image_name, blur_image)
+        del blur_image
 
     def write_row(self, subject, classname, image, action):
         csv_row = ",".join([subject, classname, image, action, "\n"])
@@ -44,8 +42,6 @@ class ImageManipulator(object):
         action = "rotate"
         degrees_bottom = -15
         degrees_top = 16
-        print(action)
-        print(image_name)
         for degree in range(degrees_bottom, degrees_top):
             if degree == 0:
                 pass
@@ -54,6 +50,7 @@ class ImageManipulator(object):
                 new_image_name = action + str(degree) + "_" + image_name
                 self.write_row(subject, src_dir, new_image_name, action)
                 misc.imsave(src_dir + "/" + new_image_name, rotate_image)
+                del rotate_image
 
 if __name__ == '__main__':
     driver_csv = sys.argv[1]
