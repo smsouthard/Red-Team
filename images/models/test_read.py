@@ -12,8 +12,6 @@ driver_list['path'] = mypath \
                       + '/' \
                       + driver_list['img']
 
-
-
 image_list = []
 
 for link in driver_list['path']:
