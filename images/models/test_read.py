@@ -3,10 +3,8 @@
 import numpy as np
 from PIL import Image
 import pandas as pd
-
-
-mypath = '/home/smsouthard/Data/train/'
-image_list = '/home/smsouthard/Data/train/driver_imgs_list.csv'
+import theano
+import theano.tensor as T
 
 def image_list_read(image_list, mypath):
 
@@ -20,9 +18,10 @@ def image_list_read(image_list, mypath):
     return driver_list
 
 
-def driver_arrays( driver_list, sample=range(0,99)):
+def driver_arrays( driver_list, sample=range(0,1000)):
 
     image_list = []
+
     for link in driver_list['path'][sample]:
         image_list.append(np.asarray(Image.open(link).convert('L'),
                                      dtype='float32').flatten())
@@ -30,7 +29,7 @@ def driver_arrays( driver_list, sample=range(0,99)):
     return image_list
 
 
-def label_arrays(driver_list, sample=range(0,99)):
+def label_arrays(driver_list, sample=range(0,1000)):
 
     labels = []
 
@@ -57,10 +56,10 @@ def shared_dataset(data_xy, borrow=True):
        variable) would lead to a large decrease in performance.
     """
     data_x, data_y = data_xy
-    shared_x = theano.shared(numpy.asarray(data_x,
+    shared_x = theano.shared(np.asarray(data_x,
                                            dtype=theano.config.floatX),
                              borrow=borrow)
-    shared_y = theano.shared(numpy.asarray(data_y,
+    shared_y = theano.shared(np.asarray(data_y,
                                            dtype=theano.config.floatX),
                              borrow=borrow)
         # When storing data on the GPU it has to be stored as floats
@@ -80,7 +79,26 @@ def shared_dataset(data_xy, borrow=True):
 #        (test_set_x, test_set_y)]
 #return rval
 
+def main():
 
+    mypath = '/home/smsouthard/Data/train/'
+    image_list = '/home/smsouthard/Data/train/driver_imgs_list.csv'
+
+    driver_list = image_list_read(image_list, mypath)
+
+    image_list =  driver_arrays(driver_list)
+
+    labels = label_arrays(driver_list)
+
+    imagexy = image_stack_builder(image_list, labels)
+
+    data = shared_dataset(imagexy)
+
+
+
+
+if __name__ == "__main__":
+    main()
 
 
 
