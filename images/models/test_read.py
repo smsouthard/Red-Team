@@ -1,16 +1,16 @@
+""
+""
 import numpy as np
 from PIL import Image
 import pandas as pd
 
 
-
-
 mypath = '/home/smsouthard/Data/train/'
+image_list = '/home/smsouthard/Data/train/driver_imgs_list.csv'
 
 def image_list_read(image_list, mypath):
 
     driver_list = pd.read_csv(image_list)
-
 
     driver_list['path'] = mypath \
                   + driver_list['classname'] \
@@ -20,8 +20,9 @@ def image_list_read(image_list, mypath):
     return driver_list
 
 
-def driver_arrays(image_list=[], driver_list, sample=0:99):
+def driver_arrays( driver_list, sample=range(0,99)):
 
+    image_list = []
     for link in driver_list['path'][sample]:
         image_list.append(np.asarray(Image.open(link).convert('L'),
                                      dtype='float32').flatten())
@@ -29,7 +30,7 @@ def driver_arrays(image_list=[], driver_list, sample=0:99):
     return image_list
 
 
-def label_arrays(driver_list, sample=0:99):
+def label_arrays(driver_list, sample=range(0,99)):
 
     labels = []
 
@@ -48,13 +49,13 @@ def image_stack_builder(image_list, labels):
 
 
 def shared_dataset(data_xy, borrow=True):
-  """ Function that loads the dataset into shared variables
-      The reason we store our dataset in shared variables is to allow
-      Theano to copy it into the GPU memory (when code is run on GPU).
-      Since copying data into the GPU is slow, copying a minibatch everytime
-      is needed (the default behaviour if the data is not in a shared
-      variable) would lead to a large decrease in performance.
-   """
+    """ Function that loads the dataset into shared variables
+       The reason we store our dataset in shared variables is to allow
+       Theano to copy it into the GPU memory (when code is run on GPU).
+       Since copying data into the GPU is slow, copying a minibatch everytime
+       is needed (the default behaviour if the data is not in a shared
+       variable) would lead to a large decrease in performance.
+    """
     data_x, data_y = data_xy
     shared_x = theano.shared(numpy.asarray(data_x,
                                            dtype=theano.config.floatX),
