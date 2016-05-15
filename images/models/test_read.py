@@ -23,4 +23,4 @@ for record in driver_list['classname']:
   labels.append(int(record[1:]))
 
 
-image_list = (np.stack(image_list), labels)
+image_list = (np.stack(image_list), np.asarray(labels, dtype='float32'))
