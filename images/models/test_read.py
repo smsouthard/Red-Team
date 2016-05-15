@@ -15,7 +15,7 @@ driver_list['path'] = mypath \
 image_list = []
 
 for link in driver_list['path'][0:99]:
-    image_list.append(np.asarray(Image.open(link).convert('L')).flatten())
+    image_list.append(np.asarray(Image.open(link).convert('L'), dtype='float32').flatten())
 
 labels = []
 
