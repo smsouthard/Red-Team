@@ -47,9 +47,11 @@ def image_stack_builder(image_list, labels):
 
     return image_list
 
+
 def sample_batcher(driver_list, batch_length):
 
     batchlist = []
+
     n_batches = int(math.ceil(len(driver_list) / batch_length))
 
     for batch in range(n_batches):
@@ -58,6 +60,7 @@ def sample_batcher(driver_list, batch_length):
         print driver_list.shape + batchlist[batch].shape
 
      return batchlist
+
 
 def iteration_machine(batchlist):
 
@@ -71,6 +74,7 @@ def iteration_machine(batchlist):
         imagexy.append(image_stack_builder(images, labels))
 
     return imagexy
+
 
 def shared_dataset(data_xy, borrow=True):
     """ Function that loads the dataset into shared variables
@@ -103,6 +107,7 @@ def shared_dataset(data_xy, borrow=True):
 #rval = [(train_set_x, train_set_y), (valid_set_x, valid_set_y),
 #        (test_set_x, test_set_y)]
 #return rval
+
 
 def main():
 
