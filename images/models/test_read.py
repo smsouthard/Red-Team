@@ -56,7 +56,8 @@ def sample_batcher(driver_list, batch_length):
         batchlist.append(driver_list.sample(batch_length))
         driver_list = driver_list.loc[~driver_list.index.isin(batchlist[batch].index)]
         print driver_list.shape + batchlist[batch].shape
-    return batchlist
+
+     return batchlist
 
 def shared_dataset(data_xy, borrow=True):
     """ Function that loads the dataset into shared variables
