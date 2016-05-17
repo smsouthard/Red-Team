@@ -59,6 +59,19 @@ def sample_batcher(driver_list, batch_length):
 
      return batchlist
 
+def iteration_machine(batchlist):
+
+    n = range(len(batchlist))
+
+    imagexy = []
+
+    for record in n:
+        images = driver_arrays(batchlist[n])
+        labels = label_arrays(batchlist[n])
+        imagexy.append(image_stack_builder(images, labels))
+
+    return imagexy
+
 def shared_dataset(data_xy, borrow=True):
     """ Function that loads the dataset into shared variables
        The reason we store our dataset in shared variables is to allow
