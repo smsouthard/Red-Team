@@ -5,6 +5,7 @@ from PIL import Image
 import pandas as pd
 import theano
 import theano.tensor as T
+import math
 
 def image_list_read(image_list, mypath):
 
@@ -33,7 +34,7 @@ def label_arrays(driver_list, sample=range(0,1000)):
 
     labels = []
 
-    for record in driver_list['classname']:
+    for record in driver_list['classname'][sample]:
         labels.append(int(record[1:]))
 
     return labels
@@ -46,6 +47,16 @@ def image_stack_builder(image_list, labels):
 
     return image_list
 
+def sample_batcher(driver_list, batch_length):
+
+    batchlist = []
+    n_batches = int(math.ceil(len(driver_list) / batch_length))
+
+    for batch in range(n_batches):
+        batchlist.append(driver_list.sample(batch_length))
+        driver_list = driver_list.loc[~driver_list.index.isin(batchlist[batch].index)]
+        print driver_list.shape + batchlist[batch].shape
+    return batchlist
 
 def shared_dataset(data_xy, borrow=True):
     """ Function that loads the dataset into shared variables
