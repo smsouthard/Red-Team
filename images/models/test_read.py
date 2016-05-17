@@ -19,7 +19,7 @@ def image_list_read(image_list, mypath):
     return driver_list
 
 
-def driver_arrays( driver_list, sample=range(0,1000)):
+def driver_arrays(driver_list, sample=range(0,1000)):
 
     image_list = []
 
