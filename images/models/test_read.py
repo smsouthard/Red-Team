@@ -7,6 +7,7 @@ import theano
 import theano.tensor as T
 import math
 
+
 def image_list_read(image_list, mypath):
 
     driver_list = pd.read_csv(image_list)
@@ -59,7 +60,7 @@ def sample_batcher(driver_list, batch_length):
         driver_list = driver_list.loc[~driver_list.index.isin(batchlist[batch].index)]
         print driver_list.shape + batchlist[batch].shape
 
-     return batchlist
+    return batchlist
 
 
 def iteration_machine(batchlist):
@@ -69,8 +70,10 @@ def iteration_machine(batchlist):
     imagexy = []
 
     for record in n:
-        images = driver_arrays(batchlist[n])
-        labels = label_arrays(batchlist[n])
+        images = driver_arrays(batchlist[record],
+                              sample=batchlist[record].index)
+        labels = label_arrays(batchlist[record],
+                              sample=batchlist[record].index)
         imagexy.append(image_stack_builder(images, labels))
 
     return imagexy
